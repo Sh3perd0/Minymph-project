@@ -2,7 +2,7 @@
 
 **A Pokémon-inspired Java project**
 
-Welcome to the Minymph Project! This project is a Pokémon-inspired game developed in Java. Below you'll find the instructions to run the project both in **Eclipse** and via the **Command-line**.
+Welcome to my Minymph Project! This project is a Pokémon-inspired game developed in Java, because I had time. Below you'll find the instructions to run the project both in **Eclipse** and via the **Command-line**.
 
 ---
 
@@ -22,7 +22,7 @@ Before you start, ensure that you have the following installed on your system:
 To run the project in **Eclipse**, follow these steps:
 
 1. **Clone the Repository**
-   - Clone the Minymph project repository to your local machine. You can do this using Git or by downloading the ZIP file.
+   - Clone the Minymph project repository to your local machine.
    
 2. **Extract the Repository**
    - If you downloaded the repository as a ZIP file, extract it to a folder on your system.
