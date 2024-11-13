@@ -2,8 +2,9 @@
 
 **A Pokémon-inspired Java project**
 
-Welcome to my personnal Minymph Project! This project is a Pokémon-inspired game developed in Java, because I had time. Below you'll find the last update that I did on the project, and instructions to run the project.
 ---
+
+Welcome to my personnal Minymph Project! This project is a Pokémon-inspired game developed in Java, because I had time. Below you'll find the last update that I did on the project, and instructions to run the project.
 
 ## Last Update ##
 **Not Finished**
