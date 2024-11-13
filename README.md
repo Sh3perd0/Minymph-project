@@ -6,7 +6,7 @@
 
 Welcome to my personnal Minymph Project! This project is a Pokémon-inspired game developed in Java, because I had time. Below you'll find the last update that I did on the project, and instructions to run the project.
 
-## Last Update ##
+## Last update
 **Not Finished**
 
 I only have implemented the combat feature of the game. It is still not finished, since I need to add other features such as accuracy of the moves, and also the most important thing: the enemy bot behaviour that you will fight.
