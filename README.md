@@ -6,6 +6,11 @@ Welcome to my personnal Minymph Project! This project is a Pokémon-inspired gam
 
 ---
 
+## Last Update ##
+**Not Finished**
+
+I only have implemented the combat feature of the game. It is still not finished, since I need to add other features such as accuracy of the moves, and also the most important thing: the enemy bot behaviour that you will fight.
+
 ## Prerequisites
 
 Before you start, ensure that you have the following installed on your system:
