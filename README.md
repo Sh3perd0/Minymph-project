@@ -2,7 +2,7 @@
 
 **A Pokémon-inspired Java project**
 
-Welcome to my Minymph Project! This project is a Pokémon-inspired game developed in Java, because I had time. Below you'll find the instructions to run the project both in **Eclipse** and via the **Command-line**.
+Welcome to my personnal Minymph Project! This project is a Pokémon-inspired game developed in Java, because I had time. Below you'll find the instructions to run the project both in **Eclipse** and via the **Command-line**.
 
 ---
 
@@ -70,14 +70,3 @@ If you prefer to run the project from the **command line**, follow these steps:
      ```bash
      java minymph_project.Main
      ```
-
----
-
-## License
-
-Include licensing information here (e.g., MIT, GPL, etc.) if applicable.
-
----
-
-Feel free to open an issue or submit a pull request if you'd like to contribute to the project!
-
