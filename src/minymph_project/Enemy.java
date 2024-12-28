@@ -1,5 +1,9 @@
 package minymph_project;
 
+
+/**
+ * Enemy - Enemy opponent which is derived from Player
+ */
 public class Enemy extends Player
 {
 
