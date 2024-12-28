@@ -9,7 +9,7 @@ Welcome to my personnal Minymph Project! This project is a Pokémon-inspired gam
 ## Last update
 - **Not Finished**
 
-I only have implemented the combat feature of the game. It is still not finished, since I need to add other features such as accuracy of the moves, and also the most important thing: the enemy bot behaviour that you will fight.
+Full combat feature except moves points and other minor features. Yet to come. Turn-based battle, AI opponent, accuracy and critical hits features. Bag items feature, Minymph switch feature, and flee. Full javadoc
 
 ## Prerequisites
 
