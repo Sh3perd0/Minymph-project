@@ -14,7 +14,6 @@ import javax.swing.JDialog;
  */
 public class Minymph {
     
-    private static int IDcount = 0;
     private String name;
     private String type;
     private GUI gui;
@@ -30,22 +29,28 @@ public class Minymph {
     private Integer speed;
     private String currentStatus = "Alive";
     private String status;
+    private static int idCount = -3; //debug because im too lazy to actually debug why the id starts at 3 and not 0 
     private Double baseHP = 20.0;
     private Random rand = new Random();
     private TypeMinymph typeMinymph = new TypeMinymph();
     private static List<Minymph> minymphs = new ArrayList<>();
     private static List<Minymph> availableMinymphs = new ArrayList<>();
     private static List<Minymph> myMinymphs = new ArrayList<>();
+    private static List<Minymph> opponentMinymphs = new ArrayList<>();
 
     /**
      * Constructs a new Minymph with specified GUI, name, and owner.
+     * @param gui : the unique gui instance
+     * @param name : name of the minymph
+     * @param owner : owner of the mynimph
      */
     public Minymph(GUI gui, String name, Player owner) {
         this.name = name;
         this.owner = owner;
         this.gui = gui;
+        idCount++;
+        id=idCount;
         hp = 20.0;
-        id = initMinymph("id");
         xp = 0;
         lvl = 0;
         atk = initMinymph("atk");
@@ -55,7 +60,6 @@ public class Minymph {
         speed = initMinymph("speed");
         type = initMinymph("type");
         status = currentStatus;
-        IDcount++;
     }
 
     /**
@@ -65,6 +69,7 @@ public class Minymph {
 
     /**
      * Returns the owner's name of this Minymph.
+     * @return returns owner name
      */
     public String getOwnerName() {
         return this.owner.getName();
@@ -72,6 +77,7 @@ public class Minymph {
 
     /**
      * Returns the owner of this Minymph.
+     * @return returns owner name without shown text
      */
     public Player getOwnerWT() {
         return this.owner;
@@ -79,11 +85,18 @@ public class Minymph {
 
     /**
      * Returns the myMinimphs list, which is a list of all the player's one Minymphs.
+     * @return returns list of player's minymphs
      */
     @SuppressWarnings("static-access")
 	public List<Minymph> getMyMinymphs()
     {
     	return this.myMinymphs;
+    }
+    
+    @SuppressWarnings("static-access")
+    public List<Minymph> getOpponentMinymphs()
+    {
+    	return this.opponentMinymphs;
     }
     
     /**
@@ -95,6 +108,7 @@ public class Minymph {
 
     /**
      * Opens a dialog to select an available Minymph for a specified action.
+     * @param callback minymph to consume
      */
     public void choseMinymph(Consumer<Minymph> callback) {
         JDialog minymphDialog = new JDialog(gui, "Choose Minymph", true);
@@ -143,6 +157,7 @@ public class Minymph {
 
     /**
      * Returns the current HP of this Minymph.
+     * @return returns hp of self minymph
      */
     public Double getHp() {
         return this.hp;
@@ -150,6 +165,7 @@ public class Minymph {
 
     /**
      * Returns all Minymphs.
+     * @return returns all minymphs
      */
     public static List<Minymph> getAllMinymph() {
         return minymphs;
@@ -157,6 +173,7 @@ public class Minymph {
 
     /**
      * Returns the base HP of this Minymph.
+     * @return returns base hp of self minymph
      */
     public Double getBaseHP() {
         return this.baseHP;
@@ -164,6 +181,7 @@ public class Minymph {
 
     /**
      * Returns the name of this Minymph.
+     * @return returns name of self minymph
      */
     public String getName() {
         return this.name;
@@ -171,6 +189,7 @@ public class Minymph {
 
     /**
      * Returns the level of this Minymph.
+     * @return returns level of self minymph
      */
     public Integer getLvl() {
         return this.lvl;
@@ -178,6 +197,7 @@ public class Minymph {
 
     /**
      * Returns the type of this Minymph.
+     * @return returns type of self minymph
      */
     public String getType() {
         return this.type;
@@ -185,6 +205,7 @@ public class Minymph {
     
     /**
      * Returns the attack stat of this Minymph, printing its value.
+     * @return returns atk of self minymph
      */
     public Integer getAtk() {
         System.out.println("Minymph " + this.name + " currently has " + this.atk + " attack.");
@@ -193,6 +214,7 @@ public class Minymph {
 
     /**
      * Returns the defense stat of this Minymph, printing its value.
+     * @return returns def of self minymph
      */
     public Integer getDef() {
         System.out.println("Minymph " + this.name + " currently has " + this.def + " defense.");
@@ -201,6 +223,7 @@ public class Minymph {
 
     /**
      * Returns the special attack stat of this Minymph, printing its value.
+     * @return returns atkspe of self minymph
      */
     public Integer getAtkspe() {
         System.out.println("Minymph " + this.name + " currently has " + this.atkspe + " special attack.");
@@ -209,6 +232,7 @@ public class Minymph {
 
     /**
      * Returns the special defense stat of this Minymph, printing its value.
+     * @return returns defspe of self minymph
      */
     public Integer getDefspe() {
         System.out.println("Minymph " + this.name + " currently has " + this.defspe + " special defense.");
@@ -217,6 +241,7 @@ public class Minymph {
 
     /**
      * Returns the speed stat of this Minymph, printing its value.
+     * @return returns speed of self minymph
      */
     public Integer getSpeed() {
         System.out.println("Minymph " + this.name + " currently has " + this.speed + " speed.");
@@ -225,6 +250,7 @@ public class Minymph {
 
     /**
      * Returns the status of this Minymph.
+     * @return returns status of self minymph
      */
     public String getStatus() {
         return this.status;
@@ -232,6 +258,7 @@ public class Minymph {
 
     /**
      * Returns the current HP as a formatted string.
+     * @return returns hp of self minymph with log text
      */
     public String getHpText() {
         String var = "Minymph " + this.name + " currently has " + this.hp + " HP\n";
@@ -242,6 +269,7 @@ public class Minymph {
     /**
      * Sets the status of this Minymph.
      * If the status is set to "KO", HP is set to 0.
+     * @param status : the new status
      */
     public void setStatus(String status) {
         if (!this.getStatus().equals("KO")) {
@@ -252,6 +280,7 @@ public class Minymph {
 
     /**
      * Sets the HP of this Minymph, rounding down to the nearest integer.
+     * @param value : new hp value
      */
     public void setHp(Double value) {
         this.hp = Math.floor(value);
@@ -286,7 +315,7 @@ public class Minymph {
     
     /**
      * Gets the experience points (XP) of this Minymph.
-     *
+     * @return returns xp of self minymph
      */
     public Integer getXp() {
         return this.xp;
@@ -351,13 +380,13 @@ public class Minymph {
     /**
      * Initializes the specified attribute of this Minymph.
      * Each attribute is initialized with a random value or ID as needed.
+     * @param param : a minymph to initialize
+     * @param <T> : type of specified param
+     * @return returns specified param
      */
     @SuppressWarnings("unchecked")
     public <T> T initMinymph(String param) {
         switch (param) {
-            case "id":
-                id = IDcount;
-                return (T) id;
             case "atk":
                 atk = rand.nextInt(9) + 1;
                 return (T) atk;
@@ -383,6 +412,7 @@ public class Minymph {
 
     /**
      * Returns a formatted string of this Minymph's stats.
+     * @return returns a formatted string of self minymph's stats
      */
     public String printStatsText() {
         String stats = "Base HP of " + this.name + " is: " + hp + "\n";
@@ -392,7 +422,7 @@ public class Minymph {
         stats += "Base special attack of " + this.name + " is: " + atkspe + "\n";
         stats += "Base special defense of " + this.name + " is: " + defspe + "\n";
         stats += "Base speed of " + this.name + " is: " + speed + "\n";
-        stats += "Type of " + this.name;
+        stats += "Type of " + this.name + " is: " + this.type + "\n";
         stats += "Owner of " + this.name + " is : " + owner.getName() + "\n";
         return stats;
     }

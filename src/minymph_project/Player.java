@@ -3,7 +3,7 @@ package minymph_project;
 /**
  * Represents a player in the game with a name and a currently selected Minymph.
  */
-public class Player {
+public abstract class Player {
     
     private Minymph currentMinymph;
     private String name;
@@ -15,6 +15,11 @@ public class Player {
      */
     public Player(String name) {
         this.name = name;
+    }
+    
+    public Player()
+    {
+    	
     }
 
     /**
@@ -43,4 +48,5 @@ public class Player {
     public Minymph getCurrentMinymph() {
         return this.currentMinymph;
     }
+    
 }

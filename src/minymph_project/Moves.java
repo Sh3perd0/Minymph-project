@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import javax.swing.*;
+import java.util.Random;
 
 /**
  * Represents a move in the Minymph game with attributes such as name, damage, PP (Power Points),
@@ -96,7 +97,7 @@ public class Moves {
      *
      * @return the accuracy of the move
      */
-    public float geAccuracy() {
+    public float getAccuracy() {
         return this.accuracy;
     }
 
@@ -109,6 +110,41 @@ public class Moves {
         return this.critRate;
     }
 
+    /**
+     * 
+     * @param moveAccuracy the selected move accuracy 
+     * @return true if the move is executed based on its accuracy
+     */
+	public static Boolean accuracyCheck(Float moveAccuracy)
+	{
+		Random random = new Random();
+		int randomNumber = random.nextInt(101);
+		float floatDebug = (float)(randomNumber);
+		if (floatDebug<=moveAccuracy)
+		{
+			return true;
+		}
+		return false;
+		
+	}
+	
+	/**
+	 * 
+	 * @param moveCritRate critRate of the chosen move
+	 * @return extra damage dealt by the critical move
+	 */
+	public Float critRateCheck(Float moveCritRate)
+	{
+		if (accuracyCheck(moveCritRate))// may be difficult to understand but instead of again instantiating a random number, I use the
+										// one in accuracyCheck by passing in parameter the selected move critRate which has the same
+										// type so thats ok
+		{
+			return (float)Math.ceil((this.getDamage()*(0.2))); // crit rate currently defined as 1/5 of a move's damage, this may change
+		}
+		
+		return (float)0;
+	}
+    
     /**
      * Returns the side effect of the move, if any.
      *
@@ -140,6 +176,11 @@ public class Moves {
      */
     public void addToList() {
         normalMoves.add(this);
+    }
+    
+    public static List<Moves> getMoves()
+    {
+    	return normalMoves;
     }
 
     /**

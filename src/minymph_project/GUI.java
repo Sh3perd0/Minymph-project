@@ -73,6 +73,45 @@ public class GUI extends JFrame {
         surrenderButton.setEnabled(false);
         repaint();
     }
+    
+    /**
+     * Disables Attack button
+     */
+    public void disableAttack()
+    {
+    	attackButton.setEnabled(false);
+    	repaint();
+    }
+    
+    /**
+     * Disables Bag button
+     */
+    
+    public void disableBag()
+    {
+    	bagButton.setEnabled(false);
+    	repaint();
+    }
+    
+    
+    /**
+     * Enables Attack button
+     */
+    public void enableAttack()
+    {
+    	attackButton.setEnabled(true);
+    	repaint();
+    }
+    
+    /**
+     * Enables Bag button
+     */
+    
+    public void enableBag()
+    {
+    	bagButton.setEnabled(true);
+    	repaint();
+    }
 
     /**
      * Enables all action buttons.

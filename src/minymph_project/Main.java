@@ -16,8 +16,8 @@ public class Main {
                 gui.setVisible(true);
 
                 // Create players
-                Player player = new Player("player");
-                Player enemy = new Player("enemy");
+                ConcretePlayer player = new ConcretePlayer("player");
+                AI enemy = new AI("Vasco");
 
                 // Create minymphs
                 Minymph minymph1 = new Minymph(gui, "Oenoko", player);
@@ -25,10 +25,10 @@ public class Main {
                 Minymph minymph3 = new Minymph(gui, "Tarteflute", player);
 
                 // Initialize moves
-                Moves headbutt = new Moves(gui, "Headbutt", 3, 20, (float)0,(float)0.85,"null");
-                Moves sweep = new Moves(gui, "Sweep", 1, 20, (float)0, (float)1,"null");
-                Moves haze = new Moves(gui, "Haze", 0, 20, (float)0, (float)1,"speedNerf");
-                Moves hyperRush = new Moves(gui, "HyperRush", 6, 5, (float)0.15, (float)0.20, "counterblow");
+                Moves headbutt = new Moves(gui, "Headbutt", 3, 20, (float)33,(float)85,"null");
+                Moves sweep = new Moves(gui, "Sweep", 1, 20, (float)33, (float)100,"null");
+                Moves haze = new Moves(gui, "Haze", 0, 20, (float)0, (float)100,"speedNerf");
+                Moves hyperRush = new Moves(gui, "HyperRush", 6, 5, (float)0, (float)20, "counterblow");
 
                 // Initialize items
                 Objects smallPotion = new Objects("Small Potion", "Health", 3.0, 0, "null", player);
@@ -76,7 +76,8 @@ public class Main {
 
                 minymph1.getMyMinymphs().add(minymph3);
                 minymph1.getMyMinymphs().add(minymph3);
-
+                minymph2.getOpponentMinymphs().add(minymph2);
+                
                 // Start the battle with the initialized GUI
                 BattleSolo duel = new BattleSolo(gui, minymph1, minymph2, minymph1);
                 duel.between();
