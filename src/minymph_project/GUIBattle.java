@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
  * Displays game information, handles user input, and provides action buttons for interaction.
  */
 @SuppressWarnings("serial")
-public class GUI extends JFrame {
+public class GUIBattle extends JFrame {
 
     // GUI components
     private JTextArea gameOutputArea;
@@ -31,16 +31,18 @@ public class GUI extends JFrame {
     /**
      * Constructor for GUI - initializes the game window and sets up components.
      */
-    public GUI() {
+    public GUIBattle() {
         // Main window configuration
         setTitle("Minymph Battle");
         setSize(1200, 800);
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Game message display area
         gameOutputArea = new JTextArea(10, 50);
         gameOutputArea.setEditable(false);
+        
         add(new JScrollPane(gameOutputArea), BorderLayout.CENTER);
 
         // Action panel (buttons)
@@ -60,6 +62,7 @@ public class GUI extends JFrame {
         setupButtonListeners();
 
         initializeGame();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -189,6 +192,6 @@ public class GUI extends JFrame {
      * @param args command line arguments (not used)
      */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GUI().setVisible(true));
+        SwingUtilities.invokeLater(() -> new GUIBattle().setVisible(true));
     }
 }

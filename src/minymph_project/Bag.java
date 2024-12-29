@@ -19,14 +19,14 @@ public class Bag {
     private static List<Objects> bag = new ArrayList<>();
     private static Scanner bagInput = new Scanner(System.in);
     private static Objects objectChosen;
-    private GUI gui;
+    private GUIBattle gui;
 
     /**
      * Constructs a Bag with a GUI reference.
      *
      * @param gui the GUI reference
      */
-    public Bag(GUI gui) {
+    public Bag(GUIBattle gui) {
         this.gui = gui;
     }
 

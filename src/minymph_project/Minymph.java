@@ -16,7 +16,7 @@ public class Minymph {
     
     private String name;
     private String type;
-    private GUI gui;
+    private GUIBattle gui;
     private Player owner;
     private Double hp;
     private Integer id;
@@ -44,7 +44,7 @@ public class Minymph {
      * @param name : name of the minymph
      * @param owner : owner of the mynimph
      */
-    public Minymph(GUI gui, String name, Player owner) {
+    public Minymph(GUIBattle gui, String name, Player owner) {
         this.name = name;
         this.owner = owner;
         this.gui = gui;

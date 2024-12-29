@@ -15,7 +15,7 @@ public class Moves {
     
     private static List<Moves> normalMoves = new ArrayList<>();
     private static List<Moves> aiNormalMoves = new ArrayList<>();
-    private GUI gui;
+    private GUIBattle gui;
     private String name;
     private int damage;
     private int PP;
@@ -43,7 +43,7 @@ public class Moves {
      * @param accuracy accuracy of the move
      * @param owner owner of the minymph
      */
-    public Moves(GUI gui, String name, Integer damage, Integer PP, Float critRate, Float accuracy, String sideEffect, Player owner) {
+    public Moves(GUIBattle gui, String name, Integer damage, Integer PP, Float critRate, Float accuracy, String sideEffect, Player owner) {
         this.gui = gui;
         this.name = name;
         this.damage = damage;
@@ -59,7 +59,7 @@ public class Moves {
      *
      * @param gui the GUI associated with the game
      */
-    public Moves(GUI gui) {
+    public Moves(GUIBattle gui) {
         this.gui = gui;
     }
 

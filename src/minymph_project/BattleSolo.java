@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
  */
 public class BattleSolo {
 	private Timer battleTimer;
-	private GUI gui;
+	private GUIBattle gui;
 	private AI AI;
 	private Moves move;
 	private static Minymph minymph1, minymph2;
@@ -39,7 +39,7 @@ public class BattleSolo {
 	 * @param myCurrentMinymph the current active minymph
 	 */
 	@SuppressWarnings("static-access")
-	public BattleSolo(GUI gui, Minymph minymph1, Minymph minymph2, Minymph myCurrentMinymph) {
+	public BattleSolo(GUIBattle gui, Minymph minymph1, Minymph minymph2, Minymph myCurrentMinymph) {
 		this.gui = gui;
 		this.minymph1 = minymph1;
 		this.minymph2 = minymph2;
