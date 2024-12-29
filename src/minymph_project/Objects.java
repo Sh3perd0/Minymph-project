@@ -12,6 +12,7 @@ public class Objects {
     private Integer id;
     private String sideEffect;
     private Player playerAffected;
+    private String message;
 
     /**
      * Constructs an object with specified attributes.
@@ -23,13 +24,14 @@ public class Objects {
      * @param sideEffect any side effect associated with the object
      * @param playerAffected the player affected by the object
      */
-    public Objects(String name, String type, Double hp, Integer id, String sideEffect, Player playerAffected) {
+    public Objects(String name, String type, Double hp, Integer id, String sideEffect, Player playerAffected, String message) {
         this.name = name;
         this.hp = hp;
         this.type = type;
         this.id = id;
         this.sideEffect = sideEffect;
         this.playerAffected = playerAffected;
+        this.message=message;
     }
 
     /**
@@ -45,6 +47,11 @@ public class Objects {
      */
     public Integer getId() {
         return this.id;
+    }
+    
+    public String getMessage()
+    {
+    	return this.message;
     }
 
     /**

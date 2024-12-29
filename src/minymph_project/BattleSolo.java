@@ -13,29 +13,19 @@ import javax.swing.SwingUtilities;
  */
 public class BattleSolo {
 	private Timer battleTimer;
-
-	/** Options for player moves presented in text form */
-	private String moveOptions = 
-			"1 : Attack \n" +
-					"2 : Bag \n" +
-					"3 : Minymph \n" +
-					"4 : Surrender \n";
-
-	/** Options for bag items presented in text form */
-	private String bagOptions = 
-			"1 : HP/PP \n" +
-					"2 : Status \n" +
-					"3 : Battle Items \n" +
-					"-1 : Go back \n";
-
 	private GUI gui;
 	private AI AI;
 	private Moves move;
 	private static Minymph minymph1, minymph2;
 	private boolean allPlayersMinymphDead = false;
 	private boolean allAIMinymphDead = false;
+	private boolean moveSelected = true;
+	private float AImultiplicalFactor = 1;
+	private float playersMultiplicalFactor = 1;
 	private static Minymph myCurrentMinymph;
-	private float extraDamage = 0;
+	private float extraDamageAI = 0;
+	private float extraDamagePlayer = 0;
+	private int compteurTour = 1;
 	private static Minymph myPreviousMinymph;
 	private Bag bag;
 	private boolean playersTurn = true;
@@ -76,9 +66,7 @@ public class BattleSolo {
 				{
 					gui.getGameOutputArea().append("Player's current pokemon is " + myCurrentMinymph.getName()+"\n");
 					gui.getGameOutputArea().append("AI current pokemon is " + minymph2.getName()+"\n");
-					gui.getGameOutputArea().append("\nYour turn!\n");
-					gui.getGameOutputArea().append("What will you do?\n");
-					gui.getGameOutputArea().append(moveOptions);
+					gui.getGameOutputArea().append("\n--Tour-- 1\n");
 					optionsDisplayed = true;
 				}
 			}
@@ -100,22 +88,43 @@ public class BattleSolo {
 	
 	public void executeAttackAI()
 	{
+		if (moveSelected=false) {return;}
 		if (!minymph2.getStatus().equals("KO"))
 		{
 		playersTurn=false;
-		List<Moves> movesList = Moves.getMoves();
+		List<Moves> movesList = Moves.getAIMoves();
 	    Random random = new Random();
 	    int randomIndex = random.nextInt(movesList.size());
 	    Moves randomMove = movesList.get(randomIndex); // current AI behaviour is choosing random attack each turn. May change
 	    
-	    
-	    if (Moves.accuracyCheck(randomMove.getAccuracy())) //check of the moves accuracy.
+	    if (randomMove.getSideEffect().equals("accuracyNerf") && Moves.accuracyCheck(randomMove.getAccuracy()*(1-(1-AImultiplicalFactor))))
+	    {
+	    	playersMultiplicalFactor = (float) (playersMultiplicalFactor-0.33); //if the chosen move is a accuracy nerf, we adjust the multiplicalFactor. For now, it's 33%. May change.
+	    	if (playersMultiplicalFactor <= 0.10f) {
+	    	    playersMultiplicalFactor = 0.10f;
+	    	}
+	    }
+
+	    if (Moves.accuracyCheck(randomMove.getAccuracy()*(1-(1-AImultiplicalFactor)))) //check of the moves accuracy.
 		{
+	    	
+	    	if (randomMove.getPPai()!=0)
+	    	{
 	    	gui.getGameOutputArea().append("\n" + minymph2.getName() + " uses " + randomMove.getName() + " !\n");
-	    extraDamage = randomMove.critRateCheck(randomMove.getCritRate()); // calculation of the extra damages dealt by potential critical hit (which probability is also calculated)
-	    if (randomMove.getSideEffect().equals("counterblow")) {
+	    	randomMove.setPPai(randomMove.getPPai()-1);
+	    	if (Moves.accuracyCheck(randomMove.getCritRate())) // calculation of the extra damages dealt by potential critical hit (which probability is also calculated)
+			{
+				extraDamageAI = (float) Math.ceil((randomMove.getDamage()*0.15)); // currently extraDamage is defined as 15% of the move's damage
+				gui.getGameOutputArea().append("\nCritical hit ! \n");
+				System.out.println("\nvalue of extraDamage " + extraDamageAI+ "\n");
+			}
+	    	
+	    
+	    if (randomMove.getSideEffect().equals("counterblow")) 
+	    {
+	    	
 	    	minymph2.setHp(minymph2.getHp() - randomMove.getDamage()*0.3); // current counterblow damage calculation : 1/3 of the move's damage. May change it later
-			myCurrentMinymph.setHp(Math.floor((myCurrentMinymph.getHp() - randomMove.getDamage()) - extraDamage)); //adds crit damage
+			myCurrentMinymph.setHp(Math.floor((myCurrentMinymph.getHp() - randomMove.getDamage()) - extraDamageAI)); //adds crit damage
 	    	
 			if (myCurrentMinymph.getHp()<=0.0)
 			{
@@ -130,9 +139,13 @@ public class BattleSolo {
 
 			gui.getGameOutputArea().append("\n" + minymph2.getName() + " has " + minymph2.getHp() + " HP\n");
 		}
+	    else if ((randomMove.getSideEffect().equals("accuracyNerf")))
+	    		{
+	    			gui.getGameOutputArea().append("\n" +myCurrentMinymph.getName()+" 's accuracy fell !\n"); 
+	    		}
 	    else 
 		{
-			myCurrentMinymph.setHp(Math.floor((myCurrentMinymph.getHp() - randomMove.getDamage()) - extraDamage)); // adds crit damage
+			myCurrentMinymph.setHp(Math.floor((myCurrentMinymph.getHp() - randomMove.getDamage()) - extraDamageAI)); // adds crit damage
 			if (myCurrentMinymph.getHp()<=0)
 			{
 				gui.getGameOutputArea().append("\n" + myCurrentMinymph.getName() + " now has " + "0 HP\n");
@@ -142,14 +155,20 @@ public class BattleSolo {
 				gui.getGameOutputArea().append("\n" + myCurrentMinymph.getName() + " now has " + myCurrentMinymph.getHp() + " HP\n");
 			}
 		}playersTurn=true;
+		}else
+		{
+			gui.getGameOutputArea().append("\n" + minymph2.getName() + " uses " + randomMove.getName() + " !\n");
+			gui.getGameOutputArea().append("\nNo PP left for this move\n");
+			executeAttackAI();// recursive call to choose another move until it has PP >0
 		}
-	    
+		}
 	    else
 		{
 	    	gui.getGameOutputArea().append("\n" + minymph2.getName() + " uses " + randomMove.getName() + " !\n");
 			gui.getGameOutputArea().append("\nBut it failed !\n");
 			playersTurn=true;
 		}
+	   
 	    checkForKO();
 	    System.out.println("on teste si ko");
 		
@@ -157,7 +176,7 @@ public class BattleSolo {
 		checkForEndBattle();
 		if (allAIMinymphDead) {
 			desactivateButtons();
-
+			
 			if (battleTimer != null) {
 				battleTimer.cancel();
 			}
@@ -166,6 +185,19 @@ public class BattleSolo {
 	}
 	}
 	
+	/**
+	 * Method to sleep
+	 * @param value in miliseconds. Ex: 1000 = 1s
+	 */
+	public void sleep(Integer value)
+	{
+		try {
+		    Thread.sleep(value); // sleep for value seconds. The try catch is mandatory: it triggers an exception if the 2s is not respected (exemple if the window is manually closed before)
+		} catch (InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		    ex.printStackTrace();
+		}
+	}
 
 	/**
 	 * Retrieves the current Minymph of the player.
@@ -205,26 +237,26 @@ public class BattleSolo {
 			switch (input) 
 			{
 			case "1":
-				gui.getGameOutputArea().append("\nWhich move? \n");
 				move.chooseMove(moveChosen -> {
-					if (moveChosen != null && !myCurrentMinymph.getStatus().equals("KO")) {
+					if (moveChosen != null && !myCurrentMinymph.getStatus().equals("KO") && moveChosen.getPP()!=0) {
 						executeAttack(moveChosen, myCurrentMinymph, minymph2);
 						executeAttackAI();
+						compteurTour++;
+						gui.getGameOutputArea().append("\n--Tour--" + compteurTour + "\n");
+						
 					}
 				});
 				break;
 
 			case "2":
 				gui.getGameOutputArea().append("\nYou reach for your bag...\n");
-				gui.getGameOutputArea().append(bagOptions);
 				bag.chooseBag(objectChosen -> {
-					if (objectChosen != null) {
-						useBagItem(objectChosen);
-						gui.getGameOutputArea().append("\n" + myCurrentMinymph.getOwnerName() + " uses " + objectChosen.getName()+ " !\n");
+					if (objectChosen != null && useBagItem(objectChosen)) {
 						executeAttackAI();
-					} else {
-						gui.getGameOutputArea().append("No item chosen or canceled.\n");
-					}
+						compteurTour++;
+						gui.getGameOutputArea().append("\n--Tour--" + compteurTour + "\n");
+
+					} 
 				});
 				break;
 
@@ -235,11 +267,12 @@ public class BattleSolo {
 					if (minymphChosen != null && !minymphChosen.getStatus().equals("KO")) {
 						myPreviousMinymph = myCurrentMinymph;
 						myCurrentMinymph = minymphChosen;
-						gui.getGameOutputArea().append("The minymph " + minymphChosen.getName()+ " has been chosen !\n");
+						gui.getGameOutputArea().append("The minymph " + minymphChosen.getName()+ " has been chosen !\n");						
 						gui.enableAttack();
 						gui.enableBag();
 						executeAttackAI();
-
+						compteurTour++;
+						gui.getGameOutputArea().append("\n--Tour-- " + compteurTour + "\n");
 					}
 					else
 					{
@@ -273,12 +306,26 @@ public class BattleSolo {
 	 */
 	private void executeAttack(Moves moveChosen, Minymph minymph1, Minymph minymph2)
 	{
-		if (Moves.accuracyCheck(moveChosen.getAccuracy())) //check of the moves accuracy.
+		
+		if (moveChosen.getSideEffect().equals("accuracyNerf") && Moves.accuracyCheck(moveChosen.getAccuracy()*(1-(1-playersMultiplicalFactor))))
+	    {
+	    	AImultiplicalFactor = (float) (AImultiplicalFactor-0.33); //if the chosen move is a accuracy nerf, we adjust the multiplicalFactor. For now, it's 33%. May change.
+	    	if (AImultiplicalFactor <= 0.10f) {
+	    	    AImultiplicalFactor = 0.10f; //verification to not lower it too much
+	    	}
+	    }
+
+		if (Moves.accuracyCheck(moveChosen.getAccuracy()*(1-(1-playersMultiplicalFactor)))) //check of the moves accuracy + correctiveFactor
 		{
-			extraDamage = moveChosen.critRateCheck(moveChosen.getCritRate()); // calculation of the extra damages dealt by potential critical hit (which probability is also calculated)
+
+			if (moveChosen.getPP()!=0)
+	    	{
+		
 			gui.getGameOutputArea().append("\n" + minymph1.getName() + " uses " + moveChosen.getName() + " !\n");
+			moveChosen.setPP(moveChosen.getPP()-1);
 			if (Moves.accuracyCheck(moveChosen.getCritRate()))
 			{
+				extraDamagePlayer = (float)Math.ceil(moveChosen.getDamage()*0.15); // calculation of extra damage (critical hit). for now its 15% of base move damage. may chage
 				gui.getGameOutputArea().append("\nCritical hit ! \n");
 			}
 			
@@ -286,7 +333,7 @@ public class BattleSolo {
 		{
 			
 			minymph1.setHp(minymph1.getHp() - moveChosen.getDamage()*0.3); // current counterblow damage calculation : 1/3 of the move's damage. May change it later
-			minymph2.setHp(Math.floor((minymph2.getHp() - moveChosen.getDamage()) - extraDamage));
+			minymph2.setHp(Math.floor((minymph2.getHp() - moveChosen.getDamage()) - extraDamagePlayer));
 			if (minymph2.getHp()<=0.0)
 			{
 				gui.getGameOutputArea().append("\n" + minymph2.getName() + " now has "  + "0 HP\n");
@@ -299,9 +346,14 @@ public class BattleSolo {
 			}
 
 			gui.getGameOutputArea().append("\n" + minymph1.getName() + " has " + minymph1.getHp() + " HP\n");
-		} else 
+		} 
+			else if ((moveChosen.getSideEffect().equals("accuracyNerf")))
+    		{
+    			gui.getGameOutputArea().append("\n" +minymph2.getName()+" 's accuracy fell !\n"); 
+    		}
+			else 
 		{
-			minymph2.setHp(Math.floor((minymph2.getHp() - moveChosen.getDamage()) - extraDamage));
+			minymph2.setHp(Math.floor((minymph2.getHp() - moveChosen.getDamage()) - extraDamagePlayer));
 			if (minymph2.getHp()<=0)
 			{
 				gui.getGameOutputArea().append("\n" + minymph2.getName() + " now has " + "0 HP\n");
@@ -311,12 +363,21 @@ public class BattleSolo {
 				gui.getGameOutputArea().append("\n" + minymph2.getName() + " now has " + minymph2.getHp() + " HP\n");
 			}
 		}
+		}else
+		{
+			
+			gui.getGameOutputArea().append("\n" + minymph1.getName() + " uses " + moveChosen.getName() + " !\n");
+			gui.getGameOutputArea().append("\nNo PP left!\n");
+			moveSelected=false;
+		}
+			
 		}
 		else
 		{
 			gui.getGameOutputArea().append("\n" + minymph1.getName() + " uses " + moveChosen.getName() + " !\n");
 			gui.getGameOutputArea().append("\nBut it failed !\n");
 		}
+		
 		checkForKO();
 		System.out.println("on teste si ko");
 		
@@ -325,6 +386,7 @@ public class BattleSolo {
 		if (allPlayersMinymphDead) {
 			desactivateButtons();
 			gui.getGameOutputArea().append("\nAll your Minymphs are KO. You have lost\n");
+			
 
 			if (battleTimer != null) {
 				battleTimer.cancel();
@@ -344,6 +406,9 @@ public class BattleSolo {
 			@Override
 			public void run() {
 				gui.disableButtons(); // Désactiver les boutons
+				sleep(2000);
+				gui.closeWindow();
+				
 
 			}
 		});
@@ -353,37 +418,63 @@ public class BattleSolo {
 	 * @param objectChosen The item selected by the player from the bag.
 	 */
 	@SuppressWarnings("static-access")
-	private void useBagItem(Objects objectChosen) {
+	private boolean useBagItem(Objects objectChosen) {
 		if (myCurrentMinymph.getHp() < myCurrentMinymph.getBaseHP() && objectChosen.getType().equals("Health")) {
 			double newHp = myCurrentMinymph.getHp() + objectChosen.getHP();
 			myCurrentMinymph.setHp(Math.min(newHp, myCurrentMinymph.getBaseHP()));
 			gui.getGameOutputArea().append(myCurrentMinymph.getName() + " healed! New HP: " + myCurrentMinymph.getHp() + "\n");
 			bag.removeFromBag(objectChosen.getName());
+			compteurTour++;
+			gui.getGameOutputArea().append("\n--Tour-- " + compteurTour + "\n");
+			return true;
 		} else if (objectChosen.getName().equals("Revive") && myCurrentMinymph.getStatus().equals("KO")) {
 			myCurrentMinymph.setStatus("Alive");
-			myCurrentMinymph.setHp(myCurrentMinymph.getBaseHP() * 0.33);
+			myCurrentMinymph.setHp(myCurrentMinymph.getBaseHP() * 0.33); // if we revive a minymph, his hps will be 1/3 of his normal hps
 			gui.getGameOutputArea().append(myCurrentMinymph.getName() + " has been revived! HP: " + myCurrentMinymph.getHp() + "\n");
 			bag.removeFromBag("Revive");
-		} else if (objectChosen.getType().equals("Battle Items") && objectChosen.getPlayerAffected().getName().equals("player") && !objectChosen.getSideEffect().equals("null"))
+			compteurTour++;
+			gui.getGameOutputArea().append("\n--Tour-- " + compteurTour + "\n");
+			return true;
+		} else if (objectChosen.getType().equals("Battle Items") && !objectChosen.getSideEffect().equals("null"))
 		{
-			applyEffect(objectChosen.getSideEffect());
+			applyEffect(objectChosen,objectChosen.getSideEffect());
+			bag.removeFromBag(objectChosen.getName());
+			return true;
 		}
+		else if (objectChosen.getType().equals("Battle Items") && objectChosen.getSideEffect().equals("null"))
+		{
+			applyEffect(objectChosen,objectChosen.getSideEffect());
+			bag.removeFromBag(objectChosen.getName());
+			gui.getGameOutputArea().append(minymph2.getName() + " has "+minymph2.getHp());
+			return true;
+		}
+		
 		else {
 			gui.getGameOutputArea().append(myCurrentMinymph.getName() + " is already at full health or alive!\n");
+			return false;
 		}
 	}
 
 	/**
      * Method which applies attacks side effects
      */
-	private void applyEffect(String effect)
+	private void applyEffect(Objects objectChosen, String effect)
 	{
 		if (effect.equals("defenseBuff"))
 		{
 			myCurrentMinymph.setDef(myCurrentMinymph.getDef()+5);
-			gui.getGameOutputArea().append("Le minymph "+myCurrentMinymph.getName()+" a gagné 5 de def\n");
-			gui.getGameOutputArea().append("Le minymph "+myCurrentMinymph.getName()+ " a maintenant "+myCurrentMinymph.getDef()+" de def\n");
+			gui.getGameOutputArea().append("\n"+myCurrentMinymph.getName()+" defense slightly went up\n");
 
+		}
+		if (effect.equals("speedBuff"))
+		{
+			myCurrentMinymph.setSpeed(myCurrentMinymph.getSpeed()+5);
+			gui.getGameOutputArea().append("\n"+myCurrentMinymph.getName()+" speed slightly went up\n");
+		}
+		if (effect.equals("null"))
+		{
+			minymph2.setHp(minymph2.getHp()-objectChosen.getHP());
+			gui.getGameOutputArea().append("\n"+minymph2.getName()+objectChosen.getMessage());
 		}
 	}
 
@@ -413,6 +504,11 @@ public class BattleSolo {
 			{
 				gui.getGameOutputArea().append("\nPlease choose another minymph\n");
 			}
+			if(allPlayersMinymphDead)
+			{
+				gui.getGameOutputArea().append("\nAll your minymphs are KO ! You lost !\n");
+				desactivateButtons();
+			}
 			playersTurn=true;
 		}
 	}
@@ -435,8 +531,6 @@ public class BattleSolo {
 				compteur2++;
 			}
 		}
-		System.out.println("Compteur de KO : " + compteur1);
-		System.out.println("Taille de la liste : " + myCurrentMinymph.getMyMinymphs().size());
 
 		// If the counter corresponds to the size of list, then all the Minymph are KO
 		if (compteur1 == myCurrentMinymph.getMyMinymphs().size())
@@ -446,7 +540,6 @@ public class BattleSolo {
 		else if (compteur2 == minymph2.getOpponentMinymphs().size())
 		{
 			allAIMinymphDead=true;
-			System.out.println("\n on affiche le bool allAIdead "+ allAIMinymphDead);
 		}
 
 	}

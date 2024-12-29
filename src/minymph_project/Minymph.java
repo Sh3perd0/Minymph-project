@@ -179,6 +179,8 @@ public class Minymph {
         return this.baseHP;
     }
 
+    
+    
     /**
      * Returns the name of this Minymph.
      * @return returns name of self minymph

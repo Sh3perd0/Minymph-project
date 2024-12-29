@@ -14,7 +14,6 @@ public class GUI extends JFrame {
 
     // GUI components
     private JTextArea gameOutputArea;
-    private JTextField userInputField;
     private JButton attackButton;
     private JButton bagButton;
     private JButton minymphButton;
@@ -93,6 +92,14 @@ public class GUI extends JFrame {
     	repaint();
     }
     
+    /**
+     * Closes battle window
+     */
+    public void closeWindow()
+    {
+    	dispose();
+    }
+    
     
     /**
      * Enables Attack button
@@ -141,14 +148,6 @@ public class GUI extends JFrame {
         return this.gameOutputArea;
     }
 
-    /**
-     * Retrieves the user input text field.
-     *
-     * @return the user input text field
-     */
-    public JTextField getUserInputField() {
-        return this.userInputField;
-    }
 
     /**
      * Configures action listeners for each button.
