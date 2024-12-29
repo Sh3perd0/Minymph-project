@@ -9,7 +9,7 @@ Welcome to my personnal Minymph Project! This project is a Pokémon-inspired gam
 ## Last update
 - **Not Finished**
 
-Full combat feature except moves points and other minor features. Yet to come. Turn-based battle, AI opponent, accuracy and critical hits features. Bag items feature, Minymph switch feature, and flee. Full javadoc
+Full combat feature. Turn-based battle, AI opponent, accuracy and critical hits features. Each minymph PP feature, Bag items feature, Minymph switch feature, and flee. Full javadoc
 
 ## Prerequisites
 

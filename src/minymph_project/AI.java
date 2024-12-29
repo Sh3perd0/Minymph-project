@@ -4,7 +4,7 @@ import java.util.List;
 
 
 /**
- * AI - AI opponent which is derived from Player
+ * AI - AI opponent with name which is derived from Player
  */
 public class AI extends Player
 {
@@ -14,6 +14,9 @@ public class AI extends Player
 	 
 	}
 	
+	/**
+	 * AI - AI opponent which is derived from Player
+	 */
 	public AI()
 	{
 	}

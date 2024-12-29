@@ -17,6 +17,9 @@ public abstract class Player {
         this.name = name;
     }
     
+    /**
+     * Constructs a player
+     */
     public Player()
     {
     	

@@ -93,6 +93,10 @@ public class Minymph {
     	return this.myMinymphs;
     }
     
+    /**
+     * Returns the opponents Minymphs list
+     * @return returns list of opponent's minymphs
+     */
     @SuppressWarnings("static-access")
     public List<Minymph> getOpponentMinymphs()
     {

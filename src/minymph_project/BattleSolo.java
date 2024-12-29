@@ -239,8 +239,30 @@ public class BattleSolo {
 			case "1":
 				move.chooseMove(moveChosen -> {
 					if (moveChosen != null && !myCurrentMinymph.getStatus().equals("KO") && moveChosen.getPP()!=0) {
-						executeAttack(moveChosen, myCurrentMinymph, minymph2);
-						executeAttackAI();
+						if (myCurrentMinymph.getSpeed()>minymph2.getSpeed()) 
+						{
+							executeAttack(moveChosen, myCurrentMinymph, minymph2);
+							executeAttackAI();
+						}
+						else if (myCurrentMinymph.getSpeed()<minymph2.getSpeed())
+						{
+							executeAttackAI();
+							executeAttack(moveChosen, myCurrentMinymph, minymph2);
+						}
+						else
+						{
+							Random randomNumber = new Random();
+							if(randomNumber.nextInt(2)==0)
+							{
+								executeAttack(moveChosen, myCurrentMinymph, minymph2);
+								executeAttackAI();
+							}
+							else
+							{
+								executeAttackAI();
+								executeAttack(moveChosen, myCurrentMinymph, minymph2);
+							}
+						}
 						compteurTour++;
 						gui.getGameOutputArea().append("\n--Tour--" + compteurTour + "\n");
 						
@@ -445,7 +467,7 @@ public class BattleSolo {
 		{
 			applyEffect(objectChosen,objectChosen.getSideEffect());
 			bag.removeFromBag(objectChosen.getName());
-			gui.getGameOutputArea().append(minymph2.getName() + " has "+minymph2.getHp());
+			gui.getGameOutputArea().append(minymph2.getName() + " has "+minymph2.getHp()+ " hp\n");
 			return true;
 		}
 		

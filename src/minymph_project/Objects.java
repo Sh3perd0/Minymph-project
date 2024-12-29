@@ -23,6 +23,7 @@ public class Objects {
      * @param id the unique identifier for the object
      * @param sideEffect any side effect associated with the object
      * @param playerAffected the player affected by the object
+     * @param message some message which can be displayed when the object is used. May change
      */
     public Objects(String name, String type, Double hp, Integer id, String sideEffect, Player playerAffected, String message) {
         this.name = name;
@@ -49,6 +50,10 @@ public class Objects {
         return this.id;
     }
     
+    /**
+     * get this object message
+     * @return this object message
+     */
     public String getMessage()
     {
     	return this.message;

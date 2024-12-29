@@ -41,6 +41,7 @@ public class Moves {
      * @param critRate the critical rate of the move
      * @param sideEffect any side effect the move may have
      * @param accuracy accuracy of the move
+     * @param owner owner of the minymph
      */
     public Moves(GUI gui, String name, Integer damage, Integer PP, Float critRate, Float accuracy, String sideEffect, Player owner) {
         this.gui = gui;
@@ -63,8 +64,8 @@ public class Moves {
     }
 
     /**
-     * Gvies the move's minymph owner (to avoid sharing move's pp)
-     * @return
+     * Gives the move's minymph owner (to avoid sharing move's pp)
+     * @return owner of a minymph's move
      */
     public Player getOwner()
     {
@@ -116,6 +117,10 @@ public class Moves {
     	this.PP = PP;
     }
     
+    /**
+     * get PP of ai's minymphs
+     * @return pp of a specified ai's minymph
+     */
     public int getPPai()
     {
     	if (this.getOwner() instanceof AI)
@@ -205,21 +210,32 @@ public class Moves {
     }
 
     /**
-     * Adds this move to the list of normal moves.
+     * Adds this move to the player's move list
      */
     public void addToList() {
         normalMoves.add(this);
     }
     
+    /**
+     * Adds this move to the AI move's list.
+     */
     public void addToAIList() {
         aiNormalMoves.add(this);
     }
     
+    /**
+     * get player's minymph moves
+     * @return the player's minymph moves
+     */
     public static List<Moves> getMoves()
     {
     	return normalMoves;
     }
     
+    /**
+     * get ai minymph moves
+     * @return the ai minymph moves
+     */
     public static List<Moves> getAIMoves()
     {
     	return aiNormalMoves;

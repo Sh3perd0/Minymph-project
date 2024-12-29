@@ -43,7 +43,7 @@ public class Main {
                 Objects revive = new Objects("Revive", "Status", minymph1.getBaseHP() * 0.33, 4, "null", player,null);
                 Objects protectiveCrown = new Objects("Protective Crown", "Battle Items", 0.0, 5, "defenseBuff", player,null);
                 Objects speedyBoots = new Objects("Speedy Boots", "Battle Items", 0.0, 6, "speedBuff", player,null);
-                Objects caillouSaMer = new Objects("Caillou sa mer", "Battle Items", 5.0, 6, "null", player," got caillou sa mer\n");
+                Objects caillouSaMer = new Objects("Caillou sa mer", "Battle Items", 5.0, 6, "null", player," got caillou sa mer\n\n");
 
                 // Add moves to the list
                 headbutt.addToList();
