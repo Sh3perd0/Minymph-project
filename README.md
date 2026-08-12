@@ -35,5 +35,6 @@ Before you start, ensure that you have the following installed on your system:
 
 4. **Run the Project**
    - Once the files are compiled, run the main class using python :
-     ```python -m game.Main
+     ```bash
+     python -m game.Main
      ```
